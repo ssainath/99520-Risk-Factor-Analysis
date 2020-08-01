@@ -1,0 +1,34 @@
+from bs4 import BeautifulSoup
+import requests
+import re
+
+#response object
+company = open(r"returnonassets_data.txt", "r")
+newfile = open("moredata2.txt", "w+")
+
+data_and_url = []
+
+line = company.readline()
+linenumber = 0
+
+while (line != ""):
+    line = company.readline()
+    column = re.split(r'\s{2,}', line)
+    if (len(column)>7):
+        if (linenumber!=0):
+            if (column[6] != ".") and (column[5] != ".") and (column[6] != "C") and (column[5] != "C"):
+                newval = float(column[6])/float(column[5])
+                newfile.write(line[:-1] + "    " + str(newval) + "\n")
+            else:
+                newval = "."
+                newfile.write(line[:-1] + "    " + newval + "\n")
+        else:
+            linenumber += 1
+            newfile.write(line[:-1] + "    roa/n")
+
+company.close()
+newfile.close()
+
+
+
+

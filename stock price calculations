@@ -1,0 +1,46 @@
+from bs4 import BeautifulSoup
+import requests
+import re
+
+#response object
+company = open(r"annual_prices.txt", "r")
+newfile = open("stockreturn_final.txt", "w+")
+
+data_and_url = []
+
+line = company.readline()
+linenumber = 0
+listofcompanies = []
+previousline=[]
+
+while (line != ""):
+    line = company.readline()
+    column = re.split(r'\s{2,}', line)
+    if (len(column)>7):
+        if (linenumber!=0):
+            if (column[6] != ".") and (column[7] != ".") and (column[6] != "C") and (column[7] != "C"):
+                if column[4] not in listofcompanies:
+                    listofcompanies.append(column[4])
+                    newval = "-"
+                    newfile.write(line[:-1] + "    " + str(newval) + "\n")
+                    previousline=[]
+                    previousline.append(column[7])
+                else: 
+                    element=previousline[0]
+                    p1 = float(element)
+                    if float(column[7]) != 0:
+                        newval = (((p1-float(column[7]))+float(column[6]))/float(column[7])) *100
+                        newfile.write(line[:-1] + "    " + str(newval) + "\n")
+                        previousline=[]
+                        previousline.append(column[7])
+                    else:
+                        newval = "n/a"
+                        newfile.write(line[:-1] + "    " + str(newval) + "\n")
+                        previousline=[]
+                        previousline.append(column[7])
+        else:
+            linenumber += 1
+            newfile.write(line[:-1] + "    Stock Return" + "\n")
+
+company.close()
+newfile.close()
