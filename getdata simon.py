@@ -117,7 +117,7 @@ for year in years:
         else:       
             dataframe_10k = dataframe_10k.append(dataframe[(dataframe['form_type'].str.contains('10-K'))])
         
-    dataframe_10k.to_csv('C:\\Users\\simondong\\Desktop\\99520\\details_10k.csv')
+    dataframe_10k.to_csv('10-Ks.csv')
         
 print(dataframe_10k.head())
 
