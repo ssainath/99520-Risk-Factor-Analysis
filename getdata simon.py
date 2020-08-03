@@ -19,7 +19,7 @@ def remove_html_tags(text):
     clean_txt = re.sub(r'[&#]+[0-9]+', ' ', clean_txt)
     return clean_txt
     
-
+# find longest of the search results
 def max_length(array):
     max=0
     match = ""
@@ -29,7 +29,7 @@ def max_length(array):
             match = elem
     return match
 
-    
+# create empty dictionary with total word count
 def fill_dictionary(risksection):
     dict = { "uncertain" : 0,
 		"unemploy" : 0,
@@ -48,6 +48,7 @@ def fill_dictionary(risksection):
         "total words" : len(risksection)}
     return dict
 
+# count specific words
 def count_words(item_1a_section):
     counts= fill_dictionary(item_1a_section)
     words = item_1a_section.split()
@@ -100,6 +101,7 @@ dataframe_10k = pd.DataFrame(columns = columnHeaders)
 
 cik_list = []
 
+#get all the 10Ks into 10-Ks.csv
 for year in years: 
     #logging.debug('for each year..')
     for quarter in ['QTR1', 'QTR2', 'QTR3', 'QTR4']:
@@ -126,6 +128,7 @@ print(dataframe_10k.head())
 
 cik_list = get_cik_list(dataframe_10k)
 
+# for each 10-K counts the words
 for i in range(len(dataframe_10k)) : 
     url = 'https://www.sec.gov/Archives/' + dataframe_10k.iloc[i]['file_name']
     #print(url)
