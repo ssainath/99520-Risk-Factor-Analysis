@@ -45,7 +45,7 @@ def fill_dictionary(risksection):
         "predict" : 0,
         "recession" : 0,
         "pandemic" : 0,
-        "total words" : len(risksection)}
+        "total words" : 0}
     return dict
 
 # count specific words
@@ -53,6 +53,7 @@ def count_words(item_1a_section):
     counts= fill_dictionary(item_1a_section)
     words = item_1a_section.split()
     for word in words:
+	counts['total words'] +=1
         if('uncertain' in word.lower()):
             counts['uncertain'] +=1
         elif('unemploy' in word.lower()):
@@ -89,7 +90,7 @@ def count_words(item_1a_section):
 ##constants - look up how to put just the constants to configure in a different file and use it here
 
 #logging.info('Configuring parameters')
-years = range(2018,2020)
+years = range(2018,2020) #change this for your search
 document= '10-K'
 col_specification = [(0, 61), (62, 73), (74, 85), (86, 97), (98, 159)]
 columnHeaders = ['company_name','form_type','cik','date','file_name']
@@ -109,6 +110,7 @@ for year in years:
         indexfile = r'https://www.sec.gov/Archives/edgar/full-index/' + str(year) + '/' + quarter + '/company.idx'
 
         realindexfile = requests.get(indexfile, allow_redirects=True)
+	realindexfile.encoding = 'utf-8'
         
         dataframe = pd.read_fwf(StringIO(realindexfile.text), colspecs=col_specification, skiprows=9)
         #dataframe.to_csv('C:\\Users\\Shreya Sainathan\\Downloads\\file_name.csv')
