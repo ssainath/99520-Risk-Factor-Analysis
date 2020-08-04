@@ -129,7 +129,16 @@ for i in range(len(dataframe_10k)) :
     response = requests.get(url)
     response.encoding = 'utf-8'
 
-    soup = BeautifulSoup(response.text, 'html.parser')
+    goodsoup = False
+    #error handle parser failure
+    try:
+        soup = BeautifulSoup(response.text, 'html.parser')
+    except:
+        problem_10k = pd.concat([problem_10k, dataframe_10k.iloc[[i]]], axis=1, ignore_index=True)
+        goodsoup = True
+
+    if goodsoup:
+        continue
 
     #this finds all the unresolved staff comments, ideally this only returns two objects, one in catalog and the actual section
     divlist = soup.find_all("div", string = re.compile("Unresolved Staff Comments", flags=re.IGNORECASE))
