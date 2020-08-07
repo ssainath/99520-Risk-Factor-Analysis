@@ -1,0 +1,83 @@
+from bs4 import BeautifulSoup
+import requests
+import re 
+import pandas as pd
+from io import StringIO
+import requests
+import re
+
+df = pd.read_csv("2007copy.csv")
+company = open(r"ROAfinaldata.txt", "r")
+linenumber = 0
+line = company.readline()
+list_of_lists = []
+
+
+# def getcsv():
+#     from csv import reader
+#     with open('2007copy.csv', 'r') as read_obj:
+#         csv_reader = reader(read_obj)
+#         for row in csv_reader:
+#         print(row[0])
+#         if row[0] == "0":
+#             cik1= row[1]
+#             print("cik1 is")
+#             print(cik1)
+#             date = row[3]
+#             year1 = date[:4]
+#             return (cik1, year1)
+
+# def getroa():
+#     while (line != ""):
+#         line = company.readline()
+#         column = re.split(r'\s{2,}', line)
+#         if (len(column)>7):
+#             if linenumber != 0:
+#                 cikunstripped = column[4]
+#                 cik2 = cikunstripped.strip("0")
+#                 year2 = column[2]
+#                 if (column[6] != ".") and (column[5] != ".") and (column[6] != "C") and (column[5] != "C") and (column[6] != "0.0000") and (column[5] != "0.0000"):
+#                     roa = float(column[6])/(float(column[5]))
+#                 else:
+#                     roa = "."
+#     return (cik2, year2, roa)
+
+# def match():
+
+
+
+from csv import reader
+# open file in read mode
+with open('2007copy.csv', 'r') as read_obj:
+    csv_reader = reader(read_obj)
+    for row in csv_reader:
+        if row[0] == "0":
+            cik1= row[1]
+            # print("cik1 is")
+            # print(cik1)
+            date = row[3]
+            year1 = date[:4]
+            for line in company:
+                while (line != ""):
+                    line = company.readline()
+                    column = re.split(r'\s{2,}', line)
+                    if (len(column)>7):
+                        cikunstripped = column[4]
+                        cik2 = cikunstripped.strip("0")
+                        print(cik2)
+                        year2 = column[2]
+                        if (column[6] != ".") and (column[5] != ".") and (column[6] != "C") and (column[5] != "C") and (column[6] != "0.0000") and (column[5] != "0.0000"):
+                            roa = float(column[6])/(float(column[5]))
+                        else:
+                            roa = "."
+                            linenumber += 1
+                        if (cik1 == cik2) and (year1 == year2):
+                            print("match")
+                            df["Return on Assets"] = roa
+                            df.to_csv("2007merged.csv", index=False)
+                        else:
+                            df["Return on Assets"] = ""
+                            df.to_csv("2007merged.csv", index=False)
+
+company.close()
+# newfile.close()
