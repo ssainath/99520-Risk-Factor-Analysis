@@ -52,18 +52,20 @@ list_of_lists = []
 
 
 for index, row in df.iterrows():
-
+    print(row)
     cik = row.loc['cik']
     date = row[3]
     year = int(date[:4])
 
     found = companydata.loc[companydata['cik'] == cik]
-    print(found)
     if not (found.empty):
         #now match year
         foundyear = found.loc[found['fyear'] == year]
         if not (foundyear.empty):
-            print("found")
+            print("found!! \n")
+            print(foundyear)
+        else:
+            print("not found")
         
             
     
