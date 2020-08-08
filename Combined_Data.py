@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import re 
 import pandas as pd
+import numpy as np
 from io import StringIO
 import requests
 import re
@@ -12,6 +13,13 @@ companydata = pd.read_csv("wrds data.csv", dtype={"fyear": pd.Int64Dtype() ,"cik
 companydata = companydata[['cik', 'conm', 'fyear', "at", "ni", "roa"]]
 companydata.to_csv("betterroa.csv", index = False)
 
+final = df.copy()
+final.reset_index(drop=True)
+
+final["at"] = ""
+final["ni"] = ""
+final["roa"] = ""
+del final['Unnamed: 0']
 
 
 linenumber = 0
@@ -51,23 +59,34 @@ list_of_lists = []
 
 
 
-for index, row in df.iterrows():
-    print(row)
+for index, row in final.iterrows():
     cik = row.loc['cik']
-    date = row[3]
+    date = row.loc['date']
     year = int(date[:4])
+    wordnumber = row.loc['total words']
+    if (wordnumber<100):
+        final.drop([index], axis=0, inplace=True)
+        continue
 
     found = companydata.loc[companydata['cik'] == cik]
     if not (found.empty):
         #now match year
         foundyear = found.loc[found['fyear'] == year]
         if not (foundyear.empty):
-            print("found!! \n")
-            print(foundyear)
+            '''
+            if (foundyear.iloc[0]['at'] == ""):
+                final.drop([index], axis=0, inplace=True)
+                continue
+            '''
+            final.loc[index, 'at'] = foundyear.iloc[0]['at']
+            final.loc[index, 'ni'] = foundyear.iloc[0]['ni']
+            final.loc[index, 'roa'] = foundyear.iloc[0]['roa']
         else:
-            print("not found")
+            final.drop([index], axis=0, inplace=True)
+    else:
+        final.drop([index], axis=0, inplace=True)
         
             
-    
+final.to_csv("merged data.csv")
 
 # newfile.close()
