@@ -86,7 +86,7 @@ def count_words(item_1a_section):
 ##constants - look up how to put just the constants to configure in a different file and use it here
 
 #logging.info('Configuring parameters')
-years = range(2010,2012)
+years = range(2012,2013)
 document= '10-K'
 col_specification = [(0, 61), (62, 73), (74, 85), (86, 97), (98, 159)]
 columnHeaders = ['company_name','form_type','cik','date','file_name']
@@ -143,5 +143,3 @@ for i in range(len(dataframe_10k)) :
     result = pd.concat([to_write, counts_dataframe], axis=1, sort=False)
     result.to_csv('final_data.csv', mode = 'a')
     
-
-
