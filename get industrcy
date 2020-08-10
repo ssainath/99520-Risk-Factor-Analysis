@@ -1,0 +1,64 @@
+from bs4 import BeautifulSoup
+import requests
+import re
+
+#response object
+company = open(r"stockreturn_final.txt", "r")
+newfile = open("stockreturn_industry.txt", "w+")
+
+data_and_url = []
+
+line = company.readline()
+linenumber = 1
+
+while (line != ""):
+    line = company.readline()
+    column = re.split(r'\s{2,}', line)
+    if (len(column)>7):
+        if (linenumber!=1):
+            siccolumn = column[3]
+            sic = siccolumn[:2]
+            if sic in ("01", "02", "03", "04","05", "06", "07", "08", "09"):
+                industry = "Agriculture, Forestry, And Fishing"
+                AFF += column[]
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            elif sic in ("10", "11", "12", "13", "14"):
+                industry = "Mining"
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            elif sic in ("15", "16", "17"):
+                industry = "Construction"
+                newfile.write(line[:-1] + "    " + industry + "\n") 
+            elif sic in ("20", "21", "22", "23","24", "25", "26", "27", "28","29", "30", "31", "32","33", "34", "35", "36", "37", "38", "39"):
+                industry = "Manufacturing"
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            elif sic in ("40", "41", "42", "43","44", "45", "46", "47", "48", "49"):
+                industry = "Transportation, Communications, Electric, Gas, Sanitation"
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            elif sic in ("50", "51"):
+                industry = "Wholesale Trade"
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            elif sic in ("52", "53", "54", "55","56", "57", "58", "59", "60"):
+                industry = "Retail Trade"
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            elif sic in ("60", "61", "62", "63","64", "65", "66", "67"):
+                industry = "Finance, Insurance, and Real Estate"
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            elif sic in ("70", "71", "72", "73","74", "75", "76", "77", "78","79", "80", "81", "82","83", "84", "85", "86", "87", "88", "89"):
+                industry = "Services"
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            elif sic in ("90", "91", "92", "93","94", "95", "96", "97", "98", "99"):
+                industry = "Public Administration"
+                newfile.write(line[:-1] + "    " + industry + "\n")
+            else:
+                industry = "       "
+                newfile.write(line[:-1] + "    " + industry + "\n")
+        else:
+            linenumber += 1
+            newfile.write(line + "    Industry\n")
+
+company.close()
+newfile.close()
+
+
+
+
